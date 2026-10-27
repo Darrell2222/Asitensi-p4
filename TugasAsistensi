@@ -1,1 +1,8 @@
+1.Untuk tugas satu, harga dapat diupdate menggunakan fungsi ini: 
+updateHarga(&dbBarang[0], 7500);
+updateHarga(&dbBarang[4], 25000); 
+void updateHarga(Barang *b, int hargaBaru) { b->harga = hargaBaru; 
+printf("\n[ADMIN] Harga %s berhasil diupdate menjadi Rp%d\n", b->nama, b->harga);
+}
+
 
