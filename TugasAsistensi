@@ -1,8 +1,190 @@
-1.Untuk tugas satu, harga dapat diupdate menggunakan fungsi ini: 
-updateHarga(&dbBarang[0], 7500);
-updateHarga(&dbBarang[4], 25000); 
-void updateHarga(Barang *b, int hargaBaru) { b->harga = hargaBaru; 
-printf("\n[ADMIN] Harga %s berhasil diupdate menjadi Rp%d\n", b->nama, b->harga);
+MINI CHALLENGE
+
+1. Mini challenge 1 :
+*(ptrArr + 2) = 999;
+printf("Elemen ketiga array setelah diubah: %d\n", *(ptrArr + 2));
+
+Jadi, *(ptrArr + 2) = 999; itu buka array elemen ke 3, lalu isinya diganti jadi angka 999
+
+2. Mini challenge 2 :
+// Fungsi baru untuk mengurangi nilai, terletak di atas fungsi main()
+void kurangReference(int *x) {
+    *x = *x - 2;
 }
 
+// Memanggil fungsi, 
+kurangReference(&nilai2); 
+printf("Setelah Pass by Reference dikurangi 2: %d\n", nilai2);
 
+3. Mini challenge 3 :
+typedef struct {
+    char nama[50];
+    int umur;
+    // Jawaban Bagian 1:
+    float IPK; 
+} Mahasiswa;
+
+// Taro didalam fungsi main()
+mhs1.IPK = 3.85;
+// Ganti printf yang lama dengan yang baru ini biar IPK-nya ikut ke-print:
+printf("Nama: %s, Umur: %d, IPK: %.2f\n", mhs1.nama, mhs1.umur, mhs1.IPK);
+
+4. Mini challenge 4 :
+// Mengubah kode pos rumah Anisa
+k1.rumah.kodePos = 60115;
+printf("UPDATE: %s sekarang tinggal di %s (%d)\n", k1.nama, k1.rumah.namaJalan, k1.rumah.kodePos);
+
+5. Mini Challenge 5 : 
+int totalNilai = 0;
+
+// 2. Loop dari urutan pertama (0) sampai ketiga (2)
+for(int i = 0; i < 3; i++) {
+totalNilai = totalNilai + kelas[i].nilai;
+} 
+float rataRata = (float)totalNilai / 3;
+printf("\nTotal Nilai: %d\n", totalNilai);
+printf("Rata-rata Nilai: %.2f\n", rataRata);
+
+6. Mini Challenge 6 :
+// Budi (index 1) beli Sampo (index 1) sebanyak 10 buah
+    beliBarang(&dbBarang[1], &dbMember[1], 10);
+
+TANTANGAN WAJIB : 
+
+1.  Untuk tugas satu, harga dapat diupdate menggunakan fungsi ini: 
+
+void updateHarga(Barang *b, int hargaBaru) {
+b->harga = hargaBaru;
+printf("\n[ADMIN] Harga %s berhasil diubah menjadi Rp%d!\n", b->nama, b->harga);
+}
+
+// masukan di dalam int main()
+updateHarga(&dbBarang[2], 15000);
+
+2.Untuk tugas dua, nama barang dapat diupdate menggunakan fungsi ini: 
+// Fungsi mengkoreksi typo
+void updateNama(Barang *b, char namaBaru[]) {
+    strcpy(b->nama, namaBaru);
+    printf("\n[ADMIN] Nama barang berhasil di-update menjadi '%s'!\n", b->nama);
+}
+// didalam int main()
+    updateNama(&dbBarang[1], "Shampoo");
+
+3.  Tugas tiga 
+//TAMBAH BLOK KODE INI SETELAH TOTAL AWAL DITENTUKAN
+if (m != NULL && m->poin >= 1000) {
+        int diskon = total * 10 / 100;
+        total -= diskon;
+        m->poin -= 1000;
+    }
+
+
+Tugas tambahan : 
+
+#include <stdio.h>
+#include <string.h>
+
+typedef struct { char nama[50]; int harga; int stock; } Barang;
+typedef struct { char nama[50]; int poin; } Member;
+
+void cekBarang(Barang db[], int ukuran) {
+    printf("\n--- Katalog Barang ---\n");
+    for(int i=0; i<ukuran; i++) {
+        printf("%d. %s - Rp%d (Stok: %d)\n", i+1, db[i].nama, db[i].harga, db[i].stock);
+    }
+}
+
+void cekMember(Member db[], int ukuran) {
+    printf("\n--- Data Member ---\n");
+    for(int i=0; i<ukuran; i++) {
+        printf("%d. %s - Poin: %d\n", i+1, db[i].nama, db[i].poin);
+    }
+}
+
+void beliBarang(Barang *b, Member *m, int qty) {
+    if (b->stock >= qty) {
+        b->stock -= qty;
+        int total = b->harga * qty;
+        
+        if (m != NULL && m->poin >= 1000) {
+            m->poin -= 1000;
+            int diskon = total * 10 / 100;
+            total -= diskon;
+            printf("\n[PROMO] %s menukar 1000 Poin untuk Diskon 10%% (Potongan Rp%d)!\n", m->nama, diskon);
+        }
+
+        printf("\n[TRANSAKSI] %d %s Terjual. Total: Rp%d\n", qty, b->nama, total);
+        
+        if (total >= 20000 && m != NULL) {
+            m->poin += 100;
+            printf("  -> Member %s mendapat +100 Poin!\n", m->nama);
+        }
+    } else {
+        printf("\n[GAGAL] Stok %s (Tersisa: %d) tidak cukup untuk dibeli sebanyak %d!\n", b->nama, b->stock, qty);
+    }
+}
+
+int main() {
+    // 1. Setup Database Awal
+    Barang dbBarang[5] = { {"Sabun", 5000, 10}, {"Sampo", 15000, 5}, {"Roti", 12000, 8}, {"Susu", 25000, 15}, {"Kopi", 22000, 20} };
+    Member dbMember[2] = { {"Anisa", 1200}, {"Budi", 100} };
+
+    int pilihan;
+    int tokoBuka = 1; // 1 artinya Buka (True), 0 artinya Tutup (False)
+
+    printf("=== SELAMAT DATANG DI MINIMARKET ===\n");
+
+    // 2. Infinite Loop (Perulangan Menu)
+    while (tokoBuka == 1) {
+        printf("\n=== MENU UTAMA ===\n");
+        printf("[1] Lihat Barang\n");
+        printf("[2] Beli Barang\n");
+        printf("[3] Cek Member\n");
+        printf("[4] Keluar\n");
+        printf("Pilih menu (1-4): ");
+        scanf("%d", &pilihan);
+
+        // 3. Switch-Case untuk mengeksekusi pilihan
+        switch(pilihan) {
+            case 1:
+                cekBarang(dbBarang, 5);
+                break;
+                
+            case 2: {
+                int idBarang, idMember, qty;
+                printf("\nMasukkan Nomor Barang (1-5): "); 
+                scanf("%d", &idBarang);
+                
+                printf("Masukkan Jumlah Beli: "); 
+                scanf("%d", &qty);
+                
+                printf("Masukkan Nomor Member (1-Anisa, 2-Budi, 0-Bukan Member): "); 
+                scanf("%d", &idMember);
+
+                // Menentukan siapa pembelinya (pointer Member)
+                Member *pembeli = NULL;
+                if (idMember == 1) pembeli = &dbMember[0];
+                else if (idMember == 2) pembeli = &dbMember[1];
+                
+                // Panggil fungsi beli (idBarang dikurangi 1 karena index array mulai dari 0)
+                beliBarang(&dbBarang[idBarang - 1], pembeli, qty);
+                break;
+            }
+            
+            case 3:
+                cekMember(dbMember, 2);
+                break;
+                
+            case 4:
+                printf("\nTerima kasih telah berbelanja! Sistem dimatikan.\n");
+                tokoBuka = 0; // Mengubah status toko jadi tutup agar loop berhenti
+                break;
+                
+            default:
+                printf("\nPilihan tidak valid! Masukkan angka 1-4.\n");
+                break;
+        }
+    }
+
+    return 0;
+}
